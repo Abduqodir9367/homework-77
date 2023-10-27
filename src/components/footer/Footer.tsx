@@ -4,7 +4,7 @@ const Footer = () => {
     <footer>
         <div className="container">
             <div className="footer-content">
-                <img src="./logo.png" alt="img" />
+                <img src="../logo.png" alt="img" />
                 <div className="footer-links">
                     <a href="#">Каталог</a>
                     <a href="#">О нас</a>
@@ -12,9 +12,9 @@ const Footer = () => {
                     <a href="#">Контакты</a>
                 </div>
                 <div className="icons">
-                    <a href="#"><img src="./face.png" alt="icon" /></a>
-                    <a href="#"><img src="./inst.png" alt="icon" /></a>
-                    <a href="#"><img src="./twit.png" alt="icon" /></a>
+                    <a href="#"><img src="../face.png" alt="icon" /></a>
+                    <a href="#"><img src="../inst.png" alt="icon" /></a>
+                    <a href="#"><img src="../twit.png" alt="icon" /></a>
                 </div>
                
             </div>

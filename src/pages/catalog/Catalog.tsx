@@ -1,5 +1,37 @@
+import { useEffect, useState } from "react";
 import "./Catalog.scss";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
 const Catalog = () => {
+  const [posts, setPosts] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  const fetchPosts = async () => {
+    try {
+      const res = await axios.get(`http://localhost:3000/cosmetics`);
+      setPosts(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`http://localhost:3000/cosmetics?_limit=4`);
+      setProducts(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   return (
     <>
       <section className="Hero">
@@ -9,151 +41,25 @@ const Catalog = () => {
             <button>Фильтр</button>
           </div>
           <div className="cards">
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
+            {posts.map((post, id) => (
+              <Link to={`/details/${post.id}`}>
+                <div className="card" key={id}>
+                  <img src={post.image} alt="img" />
+                  <div className="card-content">
+                    <div className="left">
+                      <h3>{post.name}</h3>
+                      <p>{post.description}</p>
+                    </div>
+                    <div className="left">
+                      <h3>{post.price} </h3>
+                      <p>{post.weight}</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
+              </Link>
+            ))}
           </div>
+
           <div className="btns">
             <button className="pagination">1</button>
             <p>---------</p>
@@ -167,54 +73,23 @@ const Catalog = () => {
             <h1>Вы недавно смотрели</h1>
           </div>
           <div className="latests">
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
+            {products.map((product, id) => (
+              <Link to={`/details/${product.id}`}>
+                <div className="card" key={id}>
+                  <img src={product.image} alt="img" />
+                  <div className="card-content">
+                    <div className="left">
+                      <h3>{product.name}</h3>
+                      <p>{product.description}</p>
+                    </div>
+                    <div className="left">
+                      <h3>{product.price} </h3>
+                      <p>{product.weight}</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div className="card-content">
-                <div className="left">
-                  <h3>High</h3>
-                  <p>крем для лица</p>
-                </div>
-                <div className="left">
-                  <h3>990 $</h3>
-                  <p>50ml</p>
-                </div>
-              </div>
-            </div>
+              </Link>
+            ))}
           </div>
           <div className="btns">
             <button className="pagination">1</button>

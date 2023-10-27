@@ -10,14 +10,14 @@ const Header = () => {
           </Link>
           <div className="nav-links flex flex-row gap-x-6 mr-20 ">
             <Link to={"catalog"}>Каталог</Link>
-            <Link to={"details"}>О нас</Link>
+            <Link to={"details/:id"}>О нас</Link>
             <a href="#">Контакты</a>
             <div className="nav-btns flex gap-x-4">
               <button>
-                <img src="./account.png" alt="icon" />
+                <img src="../account.png" alt="icon" />
               </button>
               <button>
-                <img src="./shop.png" alt="icon" />
+                <img src="../shop.png" alt="icon" />
               </button>
             </div>
           </div>

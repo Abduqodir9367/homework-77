@@ -1,6 +1,23 @@
+import { useEffect, useState } from "react";
 import "./Home.scss";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [posts, setPosts] = useState([]);
+
+  const fetchPosts = async () => {
+    try {
+      const res = await axios.get(`http://localhost:3000/cosmetics?_limit=5`);
+      setPosts(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   return (
     <>
       <section className="hero mt-12 mb-36">
@@ -38,28 +55,18 @@ const Home = () => {
             <div className="cart">
               <h1>Бестселлеры</h1>
               <p>Легендарные продукты, завоевавшие любовь наших клиентов</p>
-              <button>Смотреть все</button>
+              <Link to={"catalog"}><button>Смотреть все</button>
+              </Link>
             </div>
-            <div className="card">
-              <h3>High</h3>
-              <p>крем для лица</p>
-              <a href="#">Подробнее</a>
-            </div>
-            <div className="card card2">
-              <h3>High</h3>
-              <p>крем для лица</p>
-              <a href="#">Подробнее</a>
-            </div>
-            <div className="card">
-              <h3>High</h3>
-              <p>крем для лица</p>
-              <a href="#">Подробнее</a>
-            </div>
-            <div className="card card4">
-              <h3>High</h3>
-              <p>крем для лица</p>
-              <a href="#">Подробнее</a>
-            </div>
+
+            {posts.map((post, id) => (
+              <div className="card" key={id}>
+                <img src={post.image} alt="img" />
+                <h3>{post.name}</h3>
+                <p>{post.description}</p>
+                <Link to={`/details/${post.id}`}>Подробнее</Link>
+              </div>
+            ))}
           </div>
           <div className="arrows">
             <button>
