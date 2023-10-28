@@ -121,7 +121,7 @@ const Catalog = () => {
           <div className="cards">
             {filtered.length > 0
               ? filtered.map((fl, id) => (
-                  <Link to={"/oneCatalog/${fl.id}"} key={id}>
+                  <Link to={`/details/${fl.id}`} key={id}>
                     <div className="card" key={id}>
                       <img src={fl.image} alt="img" />
                       <div className="card-content">
