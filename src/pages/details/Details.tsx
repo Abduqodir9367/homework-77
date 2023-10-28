@@ -2,27 +2,36 @@ import "./Details.scss";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+type Product = {
+  id: string;
+  image: string;
+  name: string;
+  category: string;
+  weight: string;
+  price: string;
+  description: string;
+};
 
 const Details = () => {
-    const param = useParams();
-    const [product, setProduct] = useState([]);
-    const paramId = param.id * 1;
-    const [products, setProducts] = useState([]);
+  const param = useParams();
+  const [product, setProduct] = useState<Product[]>([]);
+  const paramId = param.id * 1;
+  const [products, setProducts] = useState<Product[]>([]);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            "http://localhost:3000/cosmetics/" + paramId
-          );
-          setProduct([response.data]);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/cosmetics/" + paramId
+        );
+        setProduct([response.data]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-      fetchData();
-    }, [paramId]);
+    fetchData();
+  }, [paramId]);
 
   const fetchProducts = async () => {
     try {

@@ -3,22 +3,21 @@ import "./Catalog.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+type Product = {
+  id: string;
+  image: string;
+  name: string;
+  category: string;
+  weight: string;
+  price: string;
+  description: string;
+};
+
 const Catalog = () => {
-  const [posts, setPosts] = useState([]);
-  const [products, setProducts] = useState([]);
-
-  const fetchPosts = async () => {
-    try {
-      const res = await axios.get(`http://localhost:3000/cosmetics`);
-      setPosts(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [allposts, setAllPosts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 4;
 
   const fetchProducts = async () => {
     try {
@@ -32,6 +31,63 @@ const Catalog = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const fetchPosts = async () => {
+    try {
+      let res = await axios.get("http://localhost:3000/cosmetics");
+      setAllPosts(res.data);
+      console.log(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const [input, setInput] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const searchText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const inputText = e.target.value.toLowerCase();
+    setInput(inputText);
+    console.log(input);
+  };
+
+  const filterByCategory = (category:string) => {
+    setSelectedCategory(category);
+  };
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+
+  const filtered = allposts
+    .filter((el) => {
+      if (selectedCategory === "" && input === "") {
+        return true;
+      } else if (selectedCategory !== "" && input === "") {
+        return el.category === selectedCategory;
+      } else if (selectedCategory === "" && input !== "") {
+        return (
+          el.name.toLowerCase().includes(input) ||
+          el.description.toLowerCase().includes(input)
+        );
+      } else {
+        return (
+          el.category === selectedCategory &&
+          (el.name.toLowerCase().includes(input) ||
+            el.description.toLowerCase().includes(input))
+        );
+      }
+    })
+    .slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber:number) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <>
       <section className="Hero">
@@ -40,30 +96,63 @@ const Catalog = () => {
             <h1>Каталог</h1>
             <button>Фильтр</button>
           </div>
-          <div className="cards">
-            {posts.map((post, id) => (
-              <Link to={`/details/${post.id}`}>
-                <div className="card" key={id}>
-                  <img src={post.image} alt="img" />
-                  <div className="card-content">
-                    <div className="left">
-                      <h3>{post.name}</h3>
-                      <p>{post.description}</p>
-                    </div>
-                    <div className="left">
-                      <h3>{post.price} </h3>
-                      <p>{post.weight}</p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+          <div className="flex">
+            <input
+              type="text"
+              name="search"
+              placeholder="Search..."
+              id="search"
+              className="py-3 px-2 w-[50rem]  border-[2px]"
+              onChange={searchText}
+            />
+            <div className="categories">
+              <select
+                onChange={(e) => filterByCategory(e.target.value)}
+                className="w-[10rem] py-[1rem]"
+              >
+                <option value="all">All</option>
+                <option value="Crem">Crem</option>
+                <option value="mask">Mask</option>
+                <option value="Powders">Powders</option>
+                <option value="Foams">Foams</option>
+              </select>
+            </div>
           </div>
-
-          <div className="btns">
-            <button className="pagination">1</button>
-            <p>---------</p>
-            <button className="pagination">8</button>
+          <div className="cards">
+            {filtered.length > 0
+              ? filtered.map((fl, id) => (
+                  <Link to={"/oneCatalog/${fl.id}"} key={id}>
+                    <div className="card" key={id}>
+                      <img src={fl.image} alt="img" />
+                      <div className="card-content">
+                        <div className="left">
+                          <h3>{fl.name}</h3>
+                          <p>{fl.category}</p>
+                        </div>
+                        <div className="left">
+                          <h3>{fl.price} </h3>
+                          <p>{fl.weight}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              : null}
+          </div>
+          <div className="flex gap-5 ml-[700px] mt-[40px]">
+            {Array.from({
+              length: Math.ceil(allposts.length / postsPerPage),
+            }).map((_, index) => (
+              <p
+                key={index}
+                className={`cursor-pointer ${
+                  currentPage === index + 1 ? "text-blue-500" : ""
+                }`}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </p>
+            ))}
           </div>
         </div>
       </section>
