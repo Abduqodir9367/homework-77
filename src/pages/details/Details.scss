@@ -108,6 +108,11 @@
           border: 1px solid #b3bac1;
           width: 214px;
           height: 41px;
+          &:hover {
+            background-color: #ccc;
+            transition: 0.2s;
+            cursor: pointer;
+          }
         }
       }
     }

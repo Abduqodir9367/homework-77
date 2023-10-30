@@ -94,21 +94,19 @@ const Catalog = () => {
         <div className="container">
           <div className="par">
             <h1>Каталог</h1>
-            <button>Фильтр</button>
-          </div>
-          <div className="flex">
+            <div className="flex">
             <input
               type="text"
               name="search"
               placeholder="Search..."
               id="search"
-              className="py-3 px-2 w-[50rem]  border-[2px]"
+              className="py-3 px-2  w-60 border-2 outline-none "
               onChange={searchText}
             />
-            <div className="categories">
+            <div className="categories ml-96  ">
               <select
                 onChange={(e) => filterByCategory(e.target.value)}
-                className="w-[10rem] py-[1rem]"
+                className="w-32 h-11 border-2 outline-none	"
               >
                 <option value="all">All</option>
                 <option value="Crem">Crem</option>
@@ -118,6 +116,8 @@ const Catalog = () => {
               </select>
             </div>
           </div>
+          </div>
+        
           <div className="cards">
             {filtered.length > 0
               ? filtered.map((fl, id) => (

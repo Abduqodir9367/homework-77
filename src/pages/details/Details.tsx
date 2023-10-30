@@ -12,7 +12,7 @@ type Product = {
   description: string;
 };
 
-const Details = () => {
+const Details = ({ cart, setCart }: any) => {
   const param = useParams();
   const [product, setProduct] = useState<Product[]>([]);
   const paramId = param.id * 1;
@@ -45,6 +45,14 @@ const Details = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const handleAddToCart = (product: Product) => {
+    if (!cart.includes(product)) {
+      setCart([...cart, { ...product, numOfProducts: 1 }]);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+  };
 
   return (
     <>
@@ -90,7 +98,9 @@ const Details = () => {
                 </div>
                 <div className="last">
                   <p> {el.price}</p>
-                  <button className="submit">Добавить в корзину</button>
+                  <button onClick={() => handleAddToCart(el)}>
+                    Добавить в корзину
+                  </button>
                 </div>
               </div>
             </div>
